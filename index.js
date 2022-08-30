@@ -36,6 +36,11 @@ async function run(){
         await client.connect();
         const productsCollection = client.db('manageware').collection('products');
 
+        app.get('/product-count', async(req, res)=>{
+            const count = await productsCollection.estimatedDocumentCount();
+            res.send({count});
+        })
+
 
         app.put('/login', async (req, res) => {
             const user = req.body;
@@ -48,9 +53,20 @@ async function run(){
 
         //get all products
         app.get('/products', async (req, res)=>{
+            
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+
             const query = {};
             const cursor = productsCollection.find(query);
-            const products = await cursor.toArray();
+
+            let products;
+            if(page || size){
+                products = await cursor.skip(page*size).limit(size).toArray();
+            }
+            else{
+                products = await cursor.toArray();
+            }
             res.send(products);
             })
 
