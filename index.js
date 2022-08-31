@@ -53,7 +53,7 @@ async function run(){
 
         //get all products
         app.get('/products', async (req, res)=>{
-            
+
             const page = parseInt(req.query.page);
             const size = parseInt(req.query.size);
 
@@ -116,7 +116,7 @@ async function run(){
             const filter = { _id: ObjectId(id) };
             const ooptions = { upsert: true };
 
-            console.log('ID:', id, 'product:', updatedProduct)
+            // console.log('ID:', id, 'product:', updatedProduct)
 
             const updatedDoc = {
                 $set: {
